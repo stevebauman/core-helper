@@ -12,6 +12,7 @@
         "illuminate/support": "4.2.*",
         "mews/purifier": "dev-master"
     },
+    "license": "MIT",
     "autoload": {
         "classmap": [
             "src/migrations"
