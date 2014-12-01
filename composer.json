@@ -10,7 +10,9 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "4.2.*",
-        "mews/purifier": "dev-master"
+        "mews/purifier": "dev-master",
+        "dmyers/laravel-storage": "1.*",
+        "jildertmiedema/laravel-plupload": "dev-master"
     },
     "license": "MIT",
     "autoload": {
