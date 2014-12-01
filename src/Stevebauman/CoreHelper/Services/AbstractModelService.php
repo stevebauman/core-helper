@@ -4,7 +4,6 @@ namespace Stevebauman\CoreHelper\Services;
 
 use Exception;
 use Illuminate\Support\Facades\Paginator;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\DB;
 use Mews\Purifier\Facades\Purifier;
@@ -378,17 +377,6 @@ abstract class AbstractModelService {
     protected function dbRollbackTransaction()
     {
         return DB::rollback();
-    }
-    
-    /**
-     * Returns a laravel config entry
-     * 
-     * @param string $item
-     * @return string OR array
-     */
-    protected function getConfig($item)
-    {
-        return Config::get($item);
     }
     
     /**
