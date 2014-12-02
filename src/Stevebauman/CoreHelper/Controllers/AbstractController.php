@@ -52,8 +52,8 @@ abstract class AbstractController extends Controller {
     /**
      * Returns the given config entry from the Config facade
      * 
-     * @param type $entry
-     * @return type
+     * @param string $entry
+     * @return mixed
      */
     public function config($entry)
     {
@@ -107,8 +107,8 @@ abstract class AbstractController extends Controller {
     /**
      * Returns a JSON response to the client
      * 
-     * @param type $data
-     * @return type
+     * @param array $data
+     * @return array
      */
     public function responseJson($data)
     {
@@ -119,9 +119,9 @@ abstract class AbstractController extends Controller {
      * Returns input from the client. If clean is set to true, the input will be
      * ran through the purifier before it is returned.
      * 
-     * @param type $input
-     * @param type $clean
-     * @return null OR Input
+     * @param string $input
+     * @param boolean $clean
+     * @return mixed
      */
     protected function input($input, $clean = FALSE)
     {

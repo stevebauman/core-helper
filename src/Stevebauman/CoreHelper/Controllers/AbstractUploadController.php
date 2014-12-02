@@ -2,6 +2,7 @@
 
 namespace Stevebauman\CoreHelper\Controllers;
 
+use Illuminate\Support\Facades\View;
 use JildertMiedema\LaravelPlupload\Facades\Plupload;
 use Dmyers\Storage\Storage;
 use ErrorException;
@@ -29,21 +30,17 @@ abstract class AbstractUploadController extends AbstractController {
                 $filePath = $this->uploadPath . $fileName;
                 $url = Storage::url($filePath);
                 
-                if($file->move($this->storagePath.$this->uploadPath, $fileName)){
+                if($file->move($this->storagePath.$this->uploadPath, $fileName)) {
                     
                     //Return ajax response with file information on successful upload
-                    return $this->responseJson(array(
-                        'url'=>$url, 
-                        'name'=>$fileName, 
-                        'html'=>view($this->responseView, array(
-                            'file' => $file,
-                            'fileName' => $fileName,
-                            'filePath' => $filePath,
-                            'fileFolder' => $this->uploadPath,
-                        ))->render()
-                    ));
+                    return array('url'=>$url, 'name'=>$fileName, 'html'=>View::make($this->responseView)
+                        ->with('file', $file)
+                        ->with('fileName', $fileName)
+                        ->with('filePath', $filePath)
+                        ->with('fileFolder', $this->uploadPath)
+                        ->render());
                     
-                } else{
+                } else {
                     $this->messageType = 'danger';
                     $this->message = 'There was an error uploading your attachment';
                     

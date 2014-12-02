@@ -257,7 +257,7 @@ abstract class AbstractModelService {
     public function find($id)
     {
         $record = $this->model->find($id);
-        
+
         if($record){
             return $record;
         } else{
