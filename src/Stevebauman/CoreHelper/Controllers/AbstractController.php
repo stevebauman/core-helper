@@ -36,18 +36,6 @@ abstract class AbstractController extends Controller {
      * @var array
      */  
     protected $errors;
-
-    /**
-     * Returns a view object. This will render the view to pure HTML if the request is ajax.
-     */
-    public function view($view, $args = NULL)
-    {
-        if($this->isAjax()){
-            return $this->responseJson(view($view, $args)->render());
-        } else{
-            return view($view, $args);
-        }
-    }
     
     /**
      * Returns the given config entry from the Config facade
