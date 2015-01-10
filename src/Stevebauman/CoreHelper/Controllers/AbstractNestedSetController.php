@@ -4,6 +4,10 @@ namespace Stevebauman\CoreHelper\Controllers;
 
 use Stevebauman\CoreHelper\Controllers\AbstractController;
 
+/**
+ * Class AbstractNestedSetController
+ * @package Stevebauman\CoreHelper\Controllers
+ */
 abstract class AbstractNestedSetController extends AbstractController {
 
     /*

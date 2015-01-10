@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 
+/**
+ * Class AbstractController
+ * @package Stevebauman\CoreHelper\Controllers
+ */
 abstract class AbstractController extends Controller
 {
 
@@ -63,7 +67,7 @@ abstract class AbstractController extends Controller
      * Returns the proper response to user. If the request was made from ajax, then an json response is sent.
      * If a request is a typical request without ajax, a user is sent a redirect with session flash messages
      *
-     * @return Response
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function response()
     {
@@ -97,7 +101,7 @@ abstract class AbstractController extends Controller
      * Returns a JSON response to the client
      *
      * @param array $data
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
      */
     public function responseJson($data)
     {
@@ -128,7 +132,7 @@ abstract class AbstractController extends Controller
     /**
      * Returns all input
      *
-     * @return type Array
+     * @return array
      */
     protected function inputAll()
     {

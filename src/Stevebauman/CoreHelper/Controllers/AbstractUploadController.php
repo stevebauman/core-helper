@@ -7,6 +7,10 @@ use JildertMiedema\LaravelPlupload\Facades\Plupload;
 use Dmyers\Storage\Storage;
 use ErrorException;
 
+/**
+ * Class AbstractUploadController
+ * @package Stevebauman\CoreHelper\Controllers
+ */
 abstract class AbstractUploadController extends AbstractController {
 	
 	protected $storagePath;
