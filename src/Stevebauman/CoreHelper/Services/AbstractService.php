@@ -11,26 +11,27 @@ abstract class AbstractService {
      * Holds the data to be inserted into the database
      */
     protected $input =  array();
-    
+
     /**
      * Set's the input data to be inserted into DB
-     * 
-     * @param type $input
+     *
+     * @param array $input
+     * @return $this
      */
     public function setInput($input = array())
     {
         $this->input = $input;
-        
+
         return $this;
     }
-    
+
     /**
      * Retrieves data from the input array
-     * 
-     * @param type $field - Field to grab from the input data
-     * @param type $default - Default value to set the input to
-     * @param type $clean - Clean the input before returning
-     * @return null
+     *
+     * @param string $field
+     * @param null $default
+     * @param bool $clean
+     * @return null|type
      */
     public function getInput($field,  $default = NULL, $clean = FALSE)
     {

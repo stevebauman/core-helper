@@ -80,7 +80,7 @@ abstract class AbstractModelService extends AbstractService {
     /**
      * Create a record through eloquent mass assignment
      *
-     * @return boolean OR object
+     * @return mixed
      */
     public function create()
     {

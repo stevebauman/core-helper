@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Stevebauman\CoreHelper\Controllers;
 
@@ -7,39 +7,40 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 
-abstract class AbstractController extends Controller {
-	
+abstract class AbstractController extends Controller
+{
+
     /**
      * Stores the URL to redirect to
-     * 
+     *
      * @var string
      */
     protected $redirect;
 
     /**
      * Stores the message to display to the user
-     * 
+     *
      * @var string
      */
     protected $message;
 
     /**
      * Stores the type of message that is displayed to the user
-     * 
+     *
      * @var string
-     */   
+     */
     protected $messageType;
 
     /**
-     * Holds validator errors
-     * 
-     * @var array
-     */  
+     * Holds validator errors, either array or json string
+     *
+     * @var mixed
+     */
     protected $errors;
-    
+
     /**
      * Returns the given config entry from the Config facade
-     * 
+     *
      * @param string $entry
      * @return mixed
      */
@@ -55,7 +56,7 @@ abstract class AbstractController extends Controller {
      */
     public function isAjax()
     {
-            return Request::ajax();
+        return Request::ajax();
     }
 
     /**
@@ -65,36 +66,36 @@ abstract class AbstractController extends Controller {
      * @return Response
      */
     public function response()
-    {            
-        if($this->isAjax()){
-            if($this->errors){
+    {
+        if ($this->isAjax()) {
+            if ($this->errors) {
                 return $this->responseJson(array(
-                        'errors' => $this->errors,
+                    'errors' => $this->errors,
                 ));
-            } else{
+            } else {
                 return $this->responseJson(array(
-                        'message' => $this->message,
-                        'messageType' => $this->messageType,
-                        'redirect' => $this->redirect
+                    'message' => $this->message,
+                    'messageType' => $this->messageType,
+                    'redirect' => $this->redirect
                 ));
             }
         } else {
-            if($this->errors){
+            if ($this->errors) {
                 return redirect($this->redirect)
-                        ->withInput()
-                        ->withErrors($this->errors);
-            } else{
+                    ->withInput()
+                    ->withErrors($this->errors);
+            } else {
                 return redirect($this->redirect)
-                        ->withInput()
-                        ->with('message', $this->message)
-                        ->with('messageType', $this->messageType);
+                    ->withInput()
+                    ->with('message', $this->message)
+                    ->with('messageType', $this->messageType);
             }
         }
     }
 
     /**
      * Returns a JSON response to the client
-     * 
+     *
      * @param array $data
      * @return array
      */
@@ -102,36 +103,36 @@ abstract class AbstractController extends Controller {
     {
         return Response::json($data);
     }
-        
+
     /**
      * Returns input from the client. If clean is set to true, the input will be
      * ran through the purifier before it is returned.
-     * 
+     *
      * @param string $input
      * @param boolean $clean
      * @return mixed
      */
     protected function input($input, $clean = FALSE)
     {
-        if(Input::has($input)){
-            if($clean){
+        if (Input::has($input)) {
+            if ($clean) {
                 return $this->clean(Input::get($input));
-            } else{
+            } else {
                 return Input::get($input);
             }
         }
-        
+
         return NULL;
     }
-    
+
     /**
      * Returns all input
-     * 
+     *
      * @return type Array
      */
     protected function inputAll()
     {
         return Input::all();
     }
-	
+
 }
