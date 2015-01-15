@@ -31,7 +31,7 @@ abstract class AbstractService {
      * @param string $field
      * @param null $default
      * @param bool $clean
-     * @return null|type
+     * @return null|mixed
      */
     public function getInput($field,  $default = NULL, $clean = FALSE)
     {
@@ -77,8 +77,8 @@ abstract class AbstractService {
     /**
      * Cleans input from data removing invalid HTML tags such as scripts
      * 
-     * @param type $input
-     * @return type
+     * @param string $input
+     * @return mixed
      */
     protected function clean($input)
     {
@@ -96,7 +96,7 @@ abstract class AbstractService {
      * 
      * @param string $name
      * @param array $args
-     * @return type
+     * @return mixed
      */
     protected function fireEvent($name, $args = array())
     {
