@@ -43,17 +43,6 @@ abstract class AbstractController extends Controller
     protected $errors;
 
     /**
-     * Returns the given config entry from the Config facade
-     *
-     * @param string $entry
-     * @return mixed
-     */
-    public function config($entry)
-    {
-        return config($entry);
-    }
-
-    /**
      * Asks the request if it's ajax or not
      *
      * @return Request
