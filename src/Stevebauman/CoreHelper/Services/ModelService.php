@@ -5,9 +5,8 @@ namespace Stevebauman\CoreHelper\Services;
 use Exception;
 use Illuminate\Support\Facades\Paginator;
 use Illuminate\Support\Facades\DB;
-use Stevebauman\CoreHelper\Services\AbstractService;
 
-abstract class AbstractModelService extends AbstractService {
+abstract class ModelService extends Service {
 
     /*
      * Holds the eloquent model to query

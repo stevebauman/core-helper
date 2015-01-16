@@ -2,9 +2,7 @@
 
 namespace Stevebauman\CoreHelper\Services;
 
-use Stevebauman\CoreHelper\Services\AbstractModelService;
-
-abstract class AbstractNestedSetModelService extends AbstractModelService {
+abstract class AbstractNestedSetModelService extends Service {
 
     public function roots()
     {

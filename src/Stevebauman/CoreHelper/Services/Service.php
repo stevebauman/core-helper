@@ -5,7 +5,7 @@ namespace Stevebauman\CoreHelper\Services;
 use Mews\Purifier\Facades\Purifier;
 use Illuminate\Support\Facades\Event;
 
-abstract class AbstractService {
+abstract class Service {
     
     /*
      * Holds the data to be inserted into the database

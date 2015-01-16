@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Input;
 
+/**
+ * Class AbstractValidator
+ * @package Stevebauman\CoreHelper\Validators
+ */
 abstract class AbstractValidator
 {
 
@@ -35,6 +39,9 @@ abstract class AbstractValidator
      */
     protected $validator;
 
+    /**
+     * @param null $input
+     */
     public function __construct($input = NULL)
     {
         $this->input = $input ?: Input::all();
