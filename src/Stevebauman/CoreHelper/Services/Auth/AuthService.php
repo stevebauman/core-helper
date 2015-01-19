@@ -10,6 +10,16 @@ class AuthService
 {
 
     /**
+     * @var LdapService
+     */
+    protected $ldap;
+
+    /**
+     * @var SentryService
+     */
+    protected $sentry;
+
+    /**
      * @param LdapService $ldap
      * @param SentryService $sentry
      */

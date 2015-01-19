@@ -4,8 +4,25 @@ namespace Stevebauman\CoreHelper\Services\Auth;
 
 use Stevebauman\Corp\Facades\Corp;
 
+/**
+ * Class LdapService
+ * @package Stevebauman\CoreHelper\Services\Auth
+ */
 class LdapService
 {
+
+    /**
+     * @var Corp
+     */
+    protected $corp;
+
+    /**
+     * @param Corp $corp
+     */
+    public function __construct(Corp $corp)
+    {
+        $this->corp = $corp;
+    }
 
     /**
      * Authenticate with Corp
@@ -17,7 +34,7 @@ class LdapService
      */
     public function authenticate($username, $password)
     {
-        if (Corp::auth($username, $password)) {
+        if ($this->corp->auth($username, $password)) {
             return true;
         }
 
@@ -31,7 +48,7 @@ class LdapService
      */
     public function users()
     {
-        return Corp::users();
+        return $this->corp->users();
     }
 
     /**
@@ -42,7 +59,7 @@ class LdapService
      */
     public function user($username)
     {
-        return Corp::user($username);
+        return $this->corp->user($username);
     }
 
     /**
@@ -55,7 +72,7 @@ class LdapService
      */
     public function getUserEmail($username)
     {
-        $user = Corp::user($username);
+        $user = $this->user($username);
 
         if ($user) {
             return $user->email;
@@ -74,7 +91,7 @@ class LdapService
      */
     public function getUserFullName($username)
     {
-        $user = Corp::user($username);
+        $user = $this->user($username);
 
         if ($user) {
             return $user->name;

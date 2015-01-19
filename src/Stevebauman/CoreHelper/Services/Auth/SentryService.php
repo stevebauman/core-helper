@@ -2,7 +2,6 @@
 
 namespace Stevebauman\CoreHelper\Services\Auth;
 
-use Illuminate\Support\Facades\Config;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
@@ -110,7 +109,7 @@ class SentryService
 
 
         } catch (UserExistsException $e) {
-            $login_attribute = Config::get('cartalyst/sentry::users.login_attribute');
+            $login_attribute = config('cartalyst/sentry::users.login_attribute');
 
             $user = Sentry::findUserByLogin($data[$login_attribute]);
 
