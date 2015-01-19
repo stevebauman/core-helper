@@ -1,6 +1,6 @@
 <?php
 
-namespace Stevebauman\CoreHelper\Services;
+namespace Stevebauman\CoreHelper\Services\Auth;
 
 use Illuminate\Support\Facades\Config;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;

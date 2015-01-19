@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 
-abstract class AbstractException extends \Exception {
+abstract class Exception extends \Exception {
     
     protected $message;
     

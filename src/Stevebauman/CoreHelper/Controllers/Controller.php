@@ -2,7 +2,7 @@
 
 namespace Stevebauman\CoreHelper\Controllers;
 
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Response;
  * Class AbstractController
  * @package Stevebauman\CoreHelper\Controllers
  */
-abstract class AbstractController extends Controller
+abstract class Controller extends BaseController
 {
 
     /**

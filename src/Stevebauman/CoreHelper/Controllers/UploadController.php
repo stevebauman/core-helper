@@ -11,7 +11,7 @@ use ErrorException;
  * Class AbstractUploadController
  * @package Stevebauman\CoreHelper\Controllers
  */
-abstract class AbstractUploadController extends AbstractController {
+abstract class AbstractUploadController extends Controller {
 	
 	protected $storagePath;
 	
