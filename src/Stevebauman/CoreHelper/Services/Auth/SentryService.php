@@ -79,13 +79,7 @@ class SentryService
     {
         try {
 
-            $user = Sentry::getUserProvider()->create(array(
-                'email' => $data['email'],
-                'password' => $data['password'],
-                'username' => $data['username'],
-                'last_name' => $data['last_name'],
-                'first_name' => $data['first_name'],
-            ));
+            $user = Sentry::getUserProvider()->create($data);
 
             $activationCode = $user->getActivationCode();
             $user->attemptActivation($activationCode);
