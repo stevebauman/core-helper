@@ -73,7 +73,8 @@ class SentryService
      * @author Steve Bauman
      *
      * @param $data
-     * @return void
+     * @param null $groups
+     * @return mixed
      */
     public function createUser($data, $groups = NULL)
     {
@@ -103,6 +104,7 @@ class SentryService
 
 
         } catch (UserExistsException $e) {
+
             $login_attribute = config('cartalyst/sentry::users.login_attribute');
 
             $user = Sentry::findUserByLogin($data[$login_attribute]);
