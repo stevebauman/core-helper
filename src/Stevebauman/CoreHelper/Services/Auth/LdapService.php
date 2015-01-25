@@ -2,7 +2,7 @@
 
 namespace Stevebauman\CoreHelper\Services\Auth;
 
-use Stevebauman\Corp\Facades\Corp;
+use Stevebauman\Corp\Corp;
 
 /**
  * Class LdapService
@@ -29,8 +29,9 @@ class LdapService
      *
      * @author Steve Bauman
      *
-     * @param $username , $password
-     * @return boolean
+     * @param $username
+     * @param $password
+     * @return bool
      */
     public function authenticate($username, $password)
     {

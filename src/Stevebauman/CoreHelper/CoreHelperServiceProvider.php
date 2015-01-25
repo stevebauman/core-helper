@@ -18,7 +18,7 @@ class CoreHelperServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-            $this->package('stevebauman/core-helper');
+		$this->package('stevebauman/core-helper');
 	}
 
 	/**
@@ -28,7 +28,7 @@ class CoreHelperServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-            include __DIR__ .'/../../helpers.php';
+		include __DIR__ .'/../../helpers.php';
 	}
 
 	/**
