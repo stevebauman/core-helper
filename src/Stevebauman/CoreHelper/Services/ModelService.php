@@ -110,7 +110,6 @@ abstract class ModelService extends Service {
     /**
      * Alias for the Laravel firstOrCreate function involving database transactions
      *
-     * @param array $data
      * @return mixed
      */
     public function firstOrCreate()
@@ -125,21 +124,17 @@ abstract class ModelService extends Service {
 
                 $this->dbCommitTransaction();
 
-                return true;
+                return $record;
 
             }
-
-            $this->dbRollbackTransaction();
-
-            return false;
 
         } catch(Exception $e) {
 
             $this->dbRollbackTransaction();
 
-            return false;
-
         }
+
+        return false;
     }
 
     /**
