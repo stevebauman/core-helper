@@ -11,6 +11,10 @@ use Cartalyst\Sentry\Throttling\UserSuspendedException;
 use Cartalyst\Sentry\Throttling\UserBannedException;
 use Cartalyst\Sentry\Groups\GroupNotFoundException;
 
+/**
+ * Class SentryService
+ * @package Stevebauman\CoreHelper\Services\Auth
+ */
 class SentryService
 {
 
@@ -35,7 +39,9 @@ class SentryService
             Sentry::authenticate($credentials, $remember);
             $response['authenticated'] = true;
 
-            // Log in was goood, return authenticated response
+            /*
+             * Credentials were valid, return authenticated response
+             */
             return $response;
 
         } catch (WrongPasswordException $e) {
