@@ -65,15 +65,9 @@ abstract class ModelService extends Service {
      */
     public function where($column, $operator, $value = NULL)
     {
-        if(is_null($value)){
+        if(is_null($value)) return $this->model->where($column, $operator);
 
-            return $this->model->where($column, $operator);
-
-        } else{
-
-            return $this->model->where($column, $operator, $value);
-
-        }
+        return $this->model->where($column, $operator, $value);
     }
 
     /**
@@ -89,22 +83,19 @@ abstract class ModelService extends Service {
 
             $record = $this->model->create($this->input);
 
-            if($record) {
+            if($record)
+            {
                 $this->dbCommitTransaction();
 
                 return $record;
             }
 
+        } catch(Exception $e)
+        {
             $this->dbRollbackTransaction();
-
-            return false;
-
-        } catch(Exception $e) {
-
-            $this->dbRollbackTransaction();
-
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -116,22 +107,20 @@ abstract class ModelService extends Service {
     {
         $this->dbStartTransaction();
 
-        try {
-
+        try
+        {
             $record = $this->model->firstOrCreate($this->input);
 
-            if($record) {
-
+            if($record)
+            {
                 $this->dbCommitTransaction();
 
                 return $record;
-
             }
 
-        } catch(Exception $e) {
-
+        } catch(Exception $e)
+        {
             $this->dbRollbackTransaction();
-
         }
 
         return false;
@@ -140,34 +129,30 @@ abstract class ModelService extends Service {
     /**
      * Update a record through eloquent mass assignment
      *
-     * @param type $id
+     * @param string|int $id
      * @return boolean OR object
      */
     public function update($id)
     {
         $this->dbStartTransaction();
 
-        try{
-
+        try
+        {
             $record = $this->find($id);
 
-            if($record->update($this->input)){
-
+            if($record->update($this->input))
+            {
                 $this->dbCommitTransaction();
 
                 return $record;
-
             }
 
+        } catch(Exception $e)
+        {
             $this->dbRollbackTransaction();
-
-            return false;
-
-        } catch(Exception $e) {
-
-            $this->dbRollbackTransaction();
-
         }
+
+        return false;
     }
 
 
@@ -186,9 +171,10 @@ abstract class ModelService extends Service {
     /**
      * Apply group by sorting to the model
      *
-     * @param type $column
-     * @return type
+     * @param string $column
+     * @return mixed
      */
+
     public function groupBy($column)
     {
         return $this->model->groupBy($column);
@@ -200,35 +186,30 @@ abstract class ModelService extends Service {
      * @author Steve Bauman
      *
      * @param $ids mixed
-     * @return object
+     * @return mixed
      */
     public function find($ids)
     {
         $records = $this->model->find($ids);
 
-        if($records){
-            return $records;
-        } else{
-            throw new $this->notFoundException;
-        }
+        if($records) return $records;
+
+        throw new $this->notFoundException;
     }
 
     /**
      * Find a deleted record by ID
      *
-     * @param type $id
-     * @return type
-     * @throws type
+     * @param string|int $id
+     * @return mixed
      */
     public function findArchived($id)
     {
         $record = $this->model->withTrashed()->find($id);
 
-        if($record){
-            return $record;
-        } else{
-            throw new $this->notFoundException;
-        }
+        if($record) return $record;
+
+        throw new $this->notFoundException;
     }
 
     /**
@@ -236,14 +217,12 @@ abstract class ModelService extends Service {
      *
      * @author Steve Bauman
      *
-     * @param $id (int/string)
+     * @param string|int $id
      * @return boolean
      */
     public function destroy($id)
     {
-        if($this->model->destroy($id)){
-            return true;
-        }
+        if($this->model->destroy($id)) return true;
 
         return false;
     }
@@ -251,7 +230,8 @@ abstract class ModelService extends Service {
     /**
      * Destroy a soft deleted record by ID
      *
-     * @param type $id
+     * @param string|int $id
+     * @return mixed
      */
     public function destroyArchived($id)
     {
@@ -263,8 +243,8 @@ abstract class ModelService extends Service {
     /**
      * Restore a soft deleted record by ID
      *
-     * @param type $id
-     * @return NULL
+     * @param string|int $id
+     * @return mixed
      */
     public function restoreArchived($id)
     {
@@ -278,7 +258,7 @@ abstract class ModelService extends Service {
      * for multiple paginators on the same page.
      *
      * @param string $name
-     * @return \Stevebauman\CoreHelper\Services\AbstractModelService
+     * @return $this
      */
     public function setPaginatedName($name)
     {
@@ -330,22 +310,17 @@ abstract class ModelService extends Service {
     /**
      * Formats javascript plugin 'Pickadate' and 'Pickatime' date strings into PHP dates
      *
-     * @param type $date
-     * @param type $time
+     * @param string $date
+     * @param string $time
      * @return null OR date
      */
     protected function formatDateWithTime($date, $time = NULL)
     {
-        if($date){
-
-            if($time){
-
-                return date('Y-m-d H:i:s', strtotime($date. ' ' . $time));
-
-            }
+        if($date)
+        {
+            if($time) return date('Y-m-d H:i:s', strtotime($date. ' ' . $time));
 
             return date('Y-m-d H:i:s', strtotime($date));
-
         }
 
         return NULL;
