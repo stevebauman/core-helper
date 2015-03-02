@@ -3,15 +3,25 @@
 namespace Stevebauman\CoreHelper\Controllers;
 
 use Illuminate\Support\Facades\View;
+use Stevebauman\CoreHelper\Services\StorageService;
+use Stevebauman\CoreHelper\Services\ConfigService;
 use JildertMiedema\LaravelPlupload\Facades\Plupload;
-use Dmyers\Storage\Storage;
-use ErrorException;
 
 /**
  * Class AbstractUploadController
  * @package Stevebauman\CoreHelper\Controllers
  */
-abstract class AbstractUploadController extends Controller {
+abstract class AbstractUploadController extends Controller
+{
+    /**
+     * @var ConfigService
+     */
+    protected $config;
+
+    /**
+     * @var StorageService
+     */
+    protected $storage;
 
     /**
      * Holds the final storage path for uploaded files
@@ -33,11 +43,18 @@ abstract class AbstractUploadController extends Controller {
      * @var
      */
 	protected $responseView;
-	
-	public function __construct()
+
+    /**
+     * @param ConfigService $config
+     * @param StorageService $storage
+     */
+	public function __construct(ConfigService $config, StorageService $storage)
     {
-        $this->uploadPath = config('core-helper::temp-upload-path', 'temp/');
-        $this->storagePath = config('core-helper::base-upload-path', 'files/');
+        $this->config = $config->setPrefix('core-helper');
+        $this->storage = $storage;
+
+        $this->uploadPath = $this->config->get('temp-upload-path', 'temp/');
+        $this->storagePath = $this->config->get('base-upload-path', 'files/');
 	}
 
     /**
@@ -47,24 +64,47 @@ abstract class AbstractUploadController extends Controller {
      */
 	public function store()
     {
-        //Init Plupload receive
-        return Plupload::receive('file', function ($file){
-
+        /*
+         * Init Plupload receive
+         */
+        return Plupload::receive('file', function ($file)
+        {
+            /*
+             * Assign a unique ID for the file and assign it's original extension
+             */
             $fileName = sprintf('%s.%s', uniqid(), $file->getClientOriginalExtension());
+
+            /*
+             * Combine the upload path with the file name
+             */
             $filePath = $this->uploadPath . $fileName;
-            $url = Storage::url($filePath);
 
-            if($file->move($this->storagePath.$this->uploadPath, $fileName)) {
+            /*
+             * Get the files URL
+             */
+            $url = $this->storage->url($filePath);
 
-                //Return ajax response with file information on successful upload
-                return array('url'=>$url, 'name'=>$fileName, 'html'=>View::make($this->responseView)
-                    ->with('file', $file)
-                    ->with('fileName', $fileName)
-                    ->with('filePath', $filePath)
-                    ->with('fileFolder', $this->uploadPath)
-                    ->render());
+            /*
+             * Move the file into temporary storage
+             */
+            if($file->move($this->storagePath.$this->uploadPath, $fileName))
+            {
+                /*
+                 * Return ajax response with file information on successful upload
+                 */
+                return array(
+                    'url'=>$url,
+                    'name'=>$fileName,
+                    'html'=>View::make($this->responseView)
+                        ->with('file', $file)
+                        ->with('fileName', $fileName)
+                        ->with('filePath', $filePath)
+                        ->with('fileFolder', $this->uploadPath)
+                        ->render()
+                );
 
-            } else {
+            } else
+            {
                 $this->messageType = 'danger';
                 $this->message = 'There was an error uploading your attachment';
 
@@ -83,38 +123,38 @@ abstract class AbstractUploadController extends Controller {
         $filePath = $this->input('file_path');
         $fileFolder = $this->input('file_folder');
 
-        if($this->isAjax()) {
-
+        /*
+         * Make sure sure the request is ajax only
+         */
+        if($this->isAjax())
+        {
             /*
              * If the delete is successful
              */
-            if(Storage::delete($filePath)) {
-
+            if($this->storage->delete($filePath))
+            {
                 /*
                  * Get the folder of the file
                  */
                 $folder = $this->storagePath.$fileFolder;
 
                 /*
-                 * Try and remove the folder, catch the exception if it's
-                 * not empty
+                 * Delete the directory, but only if it's empty
                  */
-                try { rmdir($folder); } catch(ErrorException $e) {}
+                $this->storage->deleteDirectory($folder);
 
                 $this->messageType = 'success';
                 $this->message = 'Successfully deleted attachment';
 
                 return $this->response();
 
-            } else{
-
+            } else
+            {
                 $this->messageType = 'danger';
                 $this->message = 'Error deleting attachment';
 
                 return $this->response();
-
             }
-
         }
 	}
 	

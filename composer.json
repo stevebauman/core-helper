@@ -14,7 +14,6 @@
         "stevebauman/viewer": "1.0.*",
         "venturecraft/revisionable": "1.*",
         "mews/purifier": "1.*",
-        "dmyers/laravel-storage": "1.*",
         "jildertmiedema/laravel-plupload": "0.*"
     },
     "license": "MIT",
