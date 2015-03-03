@@ -17,14 +17,12 @@ use Cartalyst\Sentry\Groups\GroupNotFoundException;
  */
 class SentryService
 {
-
     /**
      * Authenticate with Sentry
      *
-     * @author Steve Bauman
-     *
-     * @param $credentials , $remember
-     * @return Array
+     * @param $credentials
+     * @param null $remember
+     * @return array
      */
     public function authenticate($credentials, $remember = NULL)
     {
@@ -33,10 +31,13 @@ class SentryService
             'message' => '',
         );
 
-        // Try to log in the user with sentry
-        try {
-
+        /*
+         * Try to log in the user with sentry
+         */
+        try
+        {
             Sentry::authenticate($credentials, $remember);
+
             $response['authenticated'] = true;
 
             /*
@@ -44,17 +45,24 @@ class SentryService
              */
             return $response;
 
-        } catch (WrongPasswordException $e) {
+        } catch (WrongPasswordException $e)
+        {
             $response['message'] = 'Username or Password is incorrect.';
-        } catch (UserNotActivatedException $e) {
-            $response['message'] = 'User has not been activated';
-        } catch (UserSuspendedException $e) {
+        } catch (UserNotActivatedException $e)
+        {
+            $response['message'] = 'Your account has not been activated.
+                Please follow the link you were emailed to activate your account.';
+        } catch (UserSuspendedException $e)
+        {
             $response['message'] = 'Your account has been suspended. Please try again later.';
-        } catch (UserBannedException $e) {
-            $response['message'] = 'Your account has been permanetly banned';
-        } catch (UserExistsException $e) {
+        } catch (UserBannedException $e)
+        {
+            $response['message'] = 'Your account has been permanently banned.';
+        } catch (UserExistsException $e)
+        {
             $response['message'] = 'Username or Password is incorrect.';
-        } catch (UserNotFoundException $e) {
+        } catch (UserNotFoundException $e)
+        {
             $response['message'] = 'Username or Password is incorrect.';
         }
 
@@ -64,8 +72,6 @@ class SentryService
     /**
      * Logout with Sentry
      *
-     * @author Steve Bauman
-     *
      * @return void
      */
     public function logout()
@@ -74,9 +80,8 @@ class SentryService
     }
 
     /**
-     * Create a user through Sentry
-     *
-     * @author Steve Bauman
+     * Create a user through Sentry and add the groups specified to the user
+     * if they exist
      *
      * @param $data
      * @param null $groups
@@ -84,71 +89,72 @@ class SentryService
      */
     public function createUser($data, $groups = NULL)
     {
-        try {
-
+        try
+        {
             $user = Sentry::getUserProvider()->create($data);
 
-            $activationCode = $user->getActivationCode();
-            $user->attemptActivation($activationCode);
-
-            if (isset($groups)) {
-
-                foreach ($groups as $group) {
-
-                    try {
-
+            if (isset($groups))
+            {
+                foreach ($groups as $group)
+                {
+                    try
+                    {
                         $group = Sentry::findGroupByName($group);
 
                         $user->addGroup($group);
 
-                    } catch (GroupNotFoundException $e) {
+                    } catch (GroupNotFoundException $e)
+                    {
 
                     }
                 }
 
             }
-
-
-        } catch (UserExistsException $e) {
-
+        } catch (UserExistsException $e)
+        {
             $login_attribute = config('cartalyst/sentry::users.login_attribute');
 
             $user = Sentry::findUserByLogin($data[$login_attribute]);
-
         }
 
         return $user;
     }
 
-
     /**
      * Create or update a group through Sentry
      *
-     * @author Steve Bauman
+     * If the permissions array is empty it will leave the current permissions intact.
      *
      * @param string $name The name for the group to find or create
      * @param array $permissions The permissions to assign the group.
-     * If the array is empty it will leave the current permissions intact.
+     * @return mixed
      */
     public function createOrUpdateGroup($name, $permissions = array())
     {
-
-        try {
-
+        try
+        {
+            /*
+             * Group already exists, lets try and update the permissions
+             * if we were supplied any
+             */
             $group = Sentry::findGroupByName($name);
 
-            if (!empty($permissions)) {
+            if (!empty($permissions))
+            {
                 $group->permissions = $permissions;
                 $group->save();
             }
 
-        } catch (GroupNotFoundException $e) {
-
+        } catch (GroupNotFoundException $e)
+        {
+            /*
+             * If the group does not exist, we'll create it and assign
+             * the permissions
+             */
             $group = Sentry::createGroup(array(
                 'name' => $name,
                 'permissions' => $permissions,
             ));
-
         }
 
         return $group;
@@ -157,10 +163,9 @@ class SentryService
     /**
      * Update a user password through sentry
      *
-     * @author Steve Bauman
-     *
-     * @param $id , $password
-     * @return boolean
+     * @param $id
+     * @param $password
+     * @return bool
      */
     public function updatePasswordById($id, $password)
     {
@@ -168,8 +173,34 @@ class SentryService
 
         $user->password = $password;
 
-        if ($user->save()) {
-            return true;
+        if ($user->save()) return true;
+
+        return false;
+    }
+
+    /**
+     * Updates a user through Sentry
+     *
+     * @param $id
+     * @param array $data
+     * @return bool
+     */
+    public function update($id, $data = array())
+    {
+        try
+        {
+            $user = Sentry::findUserById($id);
+
+            if($user->update($data))
+            {
+                return $user;
+            }
+        } catch (UserExistsException $e)
+        {
+
+        } catch(UserNotFoundException $e)
+        {
+
         }
 
         return false;
@@ -178,20 +209,18 @@ class SentryService
     /**
      * Find a user through Sentry
      *
-     * @author Steve Bauman
-     *
      * @param $id
-     * @return mixed
+     * @return bool
      */
     public function findUserById($id)
     {
-        try {
-
+        try
+        {
             $user = Sentry::findUserById($id);
 
             return $user;
-
-        } catch (UserNotFoundException $e) {
+        } catch (UserNotFoundException $e)
+        {
             return false;
         }
     }
@@ -199,20 +228,15 @@ class SentryService
     /**
      * Returns current authenticated user
      *
-     * @author Steve Bauman
-     *
-     * @return object
+     * @return mixed
      */
     public function getCurrentUser()
     {
         return Sentry::getUser();
     }
 
-
     /**
      * Returns current authenticated users full name
-     *
-     * @author Steve Bauman
      *
      * @return string
      */
@@ -228,9 +252,7 @@ class SentryService
     /**
      * Returns current authenticated user ID
      *
-     * @author Steve Bauman
-     *
-     * @return integer
+     * @return mixed
      */
     public function getCurrentUserId()
     {
@@ -238,5 +260,4 @@ class SentryService
 
         return $user->id;
     }
-
 }

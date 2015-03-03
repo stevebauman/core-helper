@@ -1,4 +1,6 @@
-<?php namespace Stevebauman\CoreHelper\Validators;
+<?php
+
+namespace Stevebauman\CoreHelper\Validators;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
@@ -10,7 +12,6 @@ use Illuminate\Support\Facades\Input;
  */
 abstract class AbstractValidator
 {
-
     /**
      * Holds the input to be passed to the validator
      *
@@ -40,22 +41,56 @@ abstract class AbstractValidator
     protected $validator;
 
     /**
-     * @param null $input
+     * @param array $input
      */
-    public function __construct($input = NULL)
+    public function __construct($input = array())
     {
-        $this->input = $input ?: Input::all();
+        ($input ? $this->setInput($input) : $this->setInput(Input::all()));
     }
 
     /**
-     * Returns the current validator object
+     * Allows rules to be set on the fly if needed
      *
-     * @return
+     * @param array $rules
+     */
+    public function setRules($rules = array())
+    {
+        $this->rules = $rules;
+    }
+
+    /**
+     * Sets the input property
+     *
+     * @param array $input
+     */
+    public function setInput($input = array())
+    {
+        $this->input = $input;
+    }
+
+    /**
+     * Sets the validator property
+     *
+     * @param $validator
+     */
+    public function setValidator($validator)
+    {
+        $this->validator = $validator;
+    }
+
+    /**
+     * Returns the current validator object and creates a new validator
+     * instance if it does not exist
+     *
+     * @return mixed
      */
     public function validator()
     {
-        if (!$this->validator) {
-            return $this->validator = Validator::make($this->input, $this->rules);
+        if (!$this->validator)
+        {
+            $validator = Validator::make($this->input, $this->rules);
+
+            $this->setValidator($validator);
         }
 
         return $this->validator;
@@ -64,15 +99,13 @@ abstract class AbstractValidator
     /**
      * Quick helper for validating input. Returns boolean on success/failure
      *
-     * @return boolean
+     * @return bool
      */
     public function passes()
     {
         $validation = $this->validator();
 
-        if ($validation->passes()) {
-            return true;
-        }
+        if ($validation->passes()) return true;
 
         $this->errors = $validation->messages();
 
@@ -95,16 +128,6 @@ abstract class AbstractValidator
     }
 
     /**
-     * Allows rules to be set on the fly if needed
-     *
-     * @param array $rules
-     */
-    public function setRules($rules = array())
-    {
-        $this->rules = $rules;
-    }
-
-    /**
      * Adds an ignore validation to be able to dynamically ignore a specific
      * table value
      *
@@ -124,10 +147,20 @@ abstract class AbstractValidator
      * @param string $field
      * @param string $table
      * @param string $column
+     * @param NULL $ignore
      */
-    public function unique($field, $table, $column)
+    public function unique($field, $table, $column, $ignore = NULL)
     {
-        $this->rules[$field] .= sprintf('|unique:%s,%s', $table, $column);
+        if(array_key_exists($field, $this->rules))
+        {
+            if($ignore)
+            {
+                $this->rules[$field] .= sprintf('|unique:%s,%s,%s', $table, $column, $ignore);
+            } else
+            {
+                $this->rules[$field] .= sprintf('|unique:%s,%s', $table, $column);
+            }
+        }
     }
 
     /**
@@ -138,12 +171,27 @@ abstract class AbstractValidator
      */
     public function addRule($field, $rule)
     {
-        if (array_key_exists($field, $this->rules)) {
-
+        if (array_key_exists($field, $this->rules))
+        {
             $this->rules[$field] .= sprintf('|%s', $rule);
-
-        } else {
+        } else
+        {
             $this->rules[$field] = $rule;
+        }
+    }
+
+    /**
+     * Allows dynamic removal of rules to a field under validation
+     *
+     * @param $field
+     * @param $rule
+     */
+    public function removeRule($field, $rule)
+    {
+        if (array_key_exists($field, $this->rules))
+        {
+            $newRule = str_replace($rule, '', $this->rules[$field]);
+            $this->rules[$field] = $newRule;
         }
     }
 
