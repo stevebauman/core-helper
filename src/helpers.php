@@ -8,39 +8,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 
-if (!function_exists('renderNode')) {
-
-    /**
-     * Returns a single lined path for a baum node.
-     *
-     * @param Baum\Node $node
-     *
-     * @return string
-     */
-    function renderNode($node) {
-        $html = '';
-
-        if (is_object($node)) {
-            $ancestors = $node->getAncestorsAndSelf();
-
-            foreach ($ancestors as $ancestor) {
-                if ($node->equals($ancestor) && $node->isRoot()) {
-                    $html .= sprintf('<b>%s</b>', $ancestor->name);
-                } elseif ($node->equals($ancestor)) {
-                    $html .= sprintf(' > <b>%s</b>', $ancestor->name);
-                } elseif ($ancestor->isRoot()) {
-                    $html .= sprintf('%s', $ancestor->name);
-                } else {
-                    $html .= sprintf(' > %s', $ancestor->name);
-                }
-            }
-
-            return $html;
-        }
-        return $node;
-    }
-}
-
 if (! function_exists('currentControllerAction')) {
 
     /**
@@ -205,5 +172,3 @@ if (!function_exists('routeBack')) {
         }
     }
 }
-        
-        
