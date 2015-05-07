@@ -45,7 +45,13 @@ abstract class AbstractValidator
      */
     public function __construct($input = [])
     {
-        ($input ? $this->setInput($input) : $this->setInput(Input::all()));
+        if(count($input) > 0)
+        {
+            $this->setInput($input);
+        } else
+        {
+            $this->setInput(Input::all());
+        }
     }
 
     /**
@@ -205,5 +211,4 @@ abstract class AbstractValidator
             $this->rules[$field] = $newRule;
         }
     }
-
 }

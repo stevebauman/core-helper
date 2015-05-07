@@ -1,9 +1,11 @@
-<?php namespace Stevebauman\CoreHelper;
+<?php
+
+namespace Stevebauman\CoreHelper;
 
 use Illuminate\Support\ServiceProvider;
 
-class CoreHelperServiceProvider extends ServiceProvider {
-
+class CoreHelperServiceProvider extends ServiceProvider
+{
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
@@ -40,5 +42,4 @@ class CoreHelperServiceProvider extends ServiceProvider {
 	{
 		return ['core-helper'];
 	}
-
 }
