@@ -18,11 +18,8 @@
     },
     "license": "MIT",
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
-        "psr-0": {
-            "Stevebauman\\CoreHelper\\": "src/"
+        "psr-4": {
+            "Stevebauman\\CoreHelper\\": "src/Stevebauman/CoreHelper/"
         }
     },
     "minimum-stability": "stable"
