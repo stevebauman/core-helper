@@ -6,10 +6,12 @@ use Exception;
 use Illuminate\Support\Facades\Paginator;
 use Illuminate\Support\Facades\DB;
 
-abstract class ModelService extends Service {
-
+abstract class ModelService extends Service
+{
     /*
      * Holds the eloquent model to query
+     *
+     * @var \Illuminate\Database\Eloquent\Model
      */
     protected $model;
 
@@ -25,7 +27,7 @@ abstract class ModelService extends Service {
      *
      * @return object
      */
-    public function get($select = array('*'))
+    public function get($select = ['*'])
     {
         return $this->model->select($select)->get();
     }
@@ -49,7 +51,7 @@ abstract class ModelService extends Service {
      *
      * @return object
      */
-    public function with($with = array())
+    public function with($with = [])
     {
         return $this->model->with($with);
     }
@@ -79,8 +81,8 @@ abstract class ModelService extends Service {
     {
         $this->dbStartTransaction();
 
-        try {
-
+        try
+        {
             $record = $this->model->create($this->input);
 
             if($record)
@@ -325,5 +327,4 @@ abstract class ModelService extends Service {
 
         return NULL;
     }
-
 }

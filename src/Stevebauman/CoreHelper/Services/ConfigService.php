@@ -7,11 +7,11 @@ use Illuminate\Config\Repository as Config;
 
 /**
  * Class ConfigService
+ *
  * @package Stevebauman\CoreHelper\Services
  */
 class ConfigService extends Service
 {
-
     /**
      * @var Config
      */
@@ -49,8 +49,9 @@ class ConfigService extends Service
     /**
      * Retrieves the specified key from the current configuration
      *
-     * @param $key
-     * @param NULL $default
+     * @param int|string $key
+     * @param mixed $default
+     *
      * @return mixed
      */
     public function get($key, $default = NULL)
@@ -63,6 +64,7 @@ class ConfigService extends Service
      *
      * @param $key
      * @param $value
+     *
      * @return $this
      */
     public function set($key, $value)
@@ -76,6 +78,7 @@ class ConfigService extends Service
      * Sets the prefix property
      *
      * @param string $prefix
+     *
      * @return $this
      */
     public function setPrefix($prefix = '')
@@ -89,6 +92,7 @@ class ConfigService extends Service
      * Sets the prefix separator
      *
      * @param string $separator
+     *
      * @return $this
      */
     public function setPrefixSeparator($separator = '')
@@ -106,6 +110,7 @@ class ConfigService extends Service
      * @param $entry
      * @param string $value
      * @param string $type
+     *
      * @return mixed
      */
     protected function replaceConfigEntry($content, $name, $entry, $value = "''", $type = 'string')
@@ -135,10 +140,12 @@ class ConfigService extends Service
     }
 
     /**
-     * Returns the contents of the specified file path
+     * Returns the contents of the specified file path.
      *
      * @param $path
+     *
      * @return string
+     *
      * @throws \Illuminate\Filesystem\FileNotFoundException
      */
     protected function getConfigFile($path)
@@ -147,12 +154,18 @@ class ConfigService extends Service
     }
 
     /**
-     * @param $path
-     * @param $content
-     * @return int
+     * Inserts the specified content into the config
+     * file that exists in the specified path.
+     *
+     * @param string $path
+     * @param string $content
+     *
+     * @return bool
      */
     protected function setConfigFile($path, $content)
     {
-        return $this->filesystem->put(app_path($path), $content);
+        if($this->filesystem->put(app_path($path), $content)) return true;
+
+        return false;
     }
 }

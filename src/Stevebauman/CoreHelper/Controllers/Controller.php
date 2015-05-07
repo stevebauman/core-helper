@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Response;
  */
 abstract class Controller extends BaseController
 {
-
     /**
      * Stores the URL to redirect to
      *
@@ -38,14 +37,14 @@ abstract class Controller extends BaseController
     /**
      * Holds validator errors, either array or json string
      *
-     * @var mixed
+     * @var array|string
      */
     protected $errors;
 
     /**
      * Asks the request if it's ajax or not
      *
-     * @return Request
+     * @return bool
      */
     public function isAjax()
     {
@@ -56,21 +55,21 @@ abstract class Controller extends BaseController
      * Returns the proper response to user. If the request was made from ajax, then an json response is sent.
      * If a request is a typical request without ajax, a user is sent a redirect with session flash messages
      *
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function response()
     {
         if ($this->isAjax()) {
             if ($this->errors) {
-                return $this->responseJson(array(
+                return $this->responseJson([
                     'errors' => $this->errors,
-                ));
+                ]);
             } else {
-                return $this->responseJson(array(
+                return $this->responseJson([
                     'message' => $this->message,
                     'messageType' => $this->messageType,
                     'redirect' => $this->redirect
-                ));
+                ]);
             }
         } else {
             if ($this->errors) {
@@ -90,6 +89,7 @@ abstract class Controller extends BaseController
      * Returns a JSON response to the client
      *
      * @param array $data
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function responseJson($data)
@@ -103,6 +103,7 @@ abstract class Controller extends BaseController
      *
      * @param string $input
      * @param boolean $clean
+     *
      * @return mixed
      */
     protected function input($input, $clean = FALSE)
@@ -127,5 +128,4 @@ abstract class Controller extends BaseController
     {
         return Input::all();
     }
-
 }

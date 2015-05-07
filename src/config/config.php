@@ -3,7 +3,7 @@
 /*
  * The CoreHelper configuration file
  */
-return array(
+return [
     
     /*
      * Path for storing temporary files that have been uploaded
@@ -14,5 +14,5 @@ return array(
      * Base storage path starting with 'files' (compatibility with dmyers/storage)
      */
     'base-upload-path' => 'files/',
-    
-);
+
+];

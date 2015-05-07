@@ -92,7 +92,7 @@ abstract class AbstractUploadController extends Controller
                 /*
                  * Return ajax response with file information on successful upload
                  */
-                return array(
+                return [
                     'url'=>$url,
                     'name'=>$fileName,
                     'html'=>View::make($this->responseView)
@@ -101,7 +101,7 @@ abstract class AbstractUploadController extends Controller
                         ->with('filePath', $filePath)
                         ->with('fileFolder', $this->uploadPath)
                         ->render()
-                );
+                ];
 
             } else
             {

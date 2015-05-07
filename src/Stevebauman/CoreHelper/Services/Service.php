@@ -2,7 +2,7 @@
 
 namespace Stevebauman\CoreHelper\Services;
 
-use Mews\Purifier\Facades\Purifier;
+use Stevebauman\Purify\Facades\Purify;
 use Illuminate\Support\Facades\Event;
 
 /**
@@ -14,15 +14,16 @@ abstract class Service
     /*
      * Holds the data to be inserted into the database
      */
-    protected $input =  array();
+    protected $input =  [];
 
     /**
      * Set's the input data to be inserted into DB
      *
      * @param array $input
+     *
      * @return $this
      */
-    public function setInput($input = array())
+    public function setInput($input = [])
     {
         $this->input = $input;
 
@@ -33,11 +34,12 @@ abstract class Service
      * Retrieves data from the input array
      *
      * @param string $field
-     * @param null $default
+     * @param mixed $default
      * @param bool $clean
+     *
      * @return null|mixed
      */
-    public function getInput($field,  $default = NULL, $clean = FALSE)
+    public function getInput($field,  $default = null, $clean = false)
     {
         /*
          * If the field exists in the input array
@@ -50,7 +52,6 @@ abstract class Service
             if($clean)
             {
                 return $this->clean($this->input[$field]);
-                
             }
 
             /*
@@ -64,7 +65,7 @@ abstract class Service
              * If key does not exist in the input array, and a 
              * default value is specified, return the default value
              */
-            if($default !== NULL)
+            if($default !== null)
             {
                 return $default;
             }
@@ -72,7 +73,7 @@ abstract class Service
             /*
              * Return NULL if the default value is not set
              */
-            return NULL;
+            return null;
         }
     }
     
@@ -80,13 +81,14 @@ abstract class Service
      * Cleans input from data removing invalid HTML tags such as scripts
      * 
      * @param string $input
+     *
      * @return mixed
      */
     protected function clean($input)
     {
         if($input)
         {
-            $cleaned = Purifier::clean($input);
+            $cleaned = Purify::clean($input);
 
             return $cleaned;
         }
@@ -99,11 +101,11 @@ abstract class Service
      * 
      * @param string $name
      * @param array $args
+     *
      * @return mixed
      */
-    protected function fireEvent($name, $args = array())
+    protected function fireEvent($name, $args = [])
     {
         return Event::fire((string) $name, (array) $args);
     }
-    
 }

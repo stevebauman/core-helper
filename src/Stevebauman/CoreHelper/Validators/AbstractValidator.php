@@ -31,7 +31,7 @@ abstract class AbstractValidator
      *
      * @var array
      */
-    protected $rules = array();
+    protected $rules = [];
 
     /**
      * Holds the current validator object
@@ -43,7 +43,7 @@ abstract class AbstractValidator
     /**
      * @param array $input
      */
-    public function __construct($input = array())
+    public function __construct($input = [])
     {
         ($input ? $this->setInput($input) : $this->setInput(Input::all()));
     }
@@ -53,7 +53,7 @@ abstract class AbstractValidator
      *
      * @param array $rules
      */
-    public function setRules($rules = array())
+    public function setRules($rules = [])
     {
         $this->rules = $rules;
     }
@@ -63,9 +63,19 @@ abstract class AbstractValidator
      *
      * @param array $input
      */
-    public function setInput($input = array())
+    public function setInput($input = [])
     {
         $this->input = $input;
+    }
+
+    /**
+     * Sets the errors property
+     *
+     * @param array $errors
+     */
+    public function setErrors($errors = [])
+    {
+        $this->errors = $errors;
     }
 
     /**
@@ -107,7 +117,7 @@ abstract class AbstractValidator
 
         if ($validation->passes()) return true;
 
-        $this->errors = $validation->messages();
+        $this->setErrors($validation->messages());
 
         return false;
     }
@@ -120,7 +130,8 @@ abstract class AbstractValidator
      */
     public function getErrors()
     {
-        if (Request::ajax()) {
+        if (Request::ajax())
+        {
             return $this->errors->getMessages();
         } else {
             return $this->errors;

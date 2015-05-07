@@ -38,7 +38,7 @@ class CoreHelperServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('core-helper');
+		return ['core-helper'];
 	}
 
 }

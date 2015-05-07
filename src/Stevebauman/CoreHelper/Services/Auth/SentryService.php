@@ -18,18 +18,19 @@ use Cartalyst\Sentry\Groups\GroupNotFoundException;
 class SentryService
 {
     /**
-     * Authenticate with Sentry
+     * Authenticate with Sentry.
      *
-     * @param $credentials
-     * @param null $remember
+     * @param array $credentials
+     * @param bool $remember
+     *
      * @return array
      */
     public function authenticate($credentials, $remember = NULL)
     {
-        $response = array(
+        $response = [
             'authenticated' => false,
             'message' => '',
-        );
+        ];
 
         /*
          * Try to log in the user with sentry
@@ -70,7 +71,7 @@ class SentryService
     }
 
     /**
-     * Logout with Sentry
+     * Logout with Sentry.
      *
      * @return void
      */
@@ -81,10 +82,11 @@ class SentryService
 
     /**
      * Create a user through Sentry and add the groups specified to the user
-     * if they exist
+     * if they exist.
      *
-     * @param $data
+     * @param array $data
      * @param null $groups
+     *
      * @return mixed
      */
     public function createUser($data, $groups = NULL)
@@ -105,7 +107,6 @@ class SentryService
 
                     } catch (GroupNotFoundException $e)
                     {
-
                     }
                 }
 
@@ -121,15 +122,16 @@ class SentryService
     }
 
     /**
-     * Create or update a group through Sentry
+     * Create or update a group through Sentry.
      *
      * If the permissions array is empty it will leave the current permissions intact.
      *
      * @param string $name The name for the group to find or create
      * @param array $permissions The permissions to assign the group.
+     *
      * @return mixed
      */
-    public function createOrUpdateGroup($name, $permissions = array())
+    public function createOrUpdateGroup($name, $permissions = [])
     {
         try
         {
@@ -139,7 +141,7 @@ class SentryService
              */
             $group = Sentry::findGroupByName($name);
 
-            if (!empty($permissions))
+            if (! empty($permissions))
             {
                 $group->permissions = $permissions;
                 $group->save();
@@ -151,20 +153,21 @@ class SentryService
              * If the group does not exist, we'll create it and assign
              * the permissions
              */
-            $group = Sentry::createGroup(array(
+            $group = Sentry::createGroup([
                 'name' => $name,
                 'permissions' => $permissions,
-            ));
+            ]);
         }
 
         return $group;
     }
 
     /**
-     * Update a user password through sentry
+     * Update a user password through sentry.
      *
-     * @param $id
-     * @param $password
+     * @param string|int $id
+     * @param string $password
+     *
      * @return bool
      */
     public function updatePasswordById($id, $password)
@@ -179,13 +182,14 @@ class SentryService
     }
 
     /**
-     * Updates a user through Sentry
+     * Updates a user through Sentry.
      *
-     * @param $id
+     * @param string|int $id
      * @param array $data
-     * @return bool
+     *
+     * @return bool|mixed
      */
-    public function update($id, $data = array())
+    public function update($id, $data = [])
     {
         try
         {
@@ -197,20 +201,19 @@ class SentryService
             }
         } catch (UserExistsException $e)
         {
-
         } catch(UserNotFoundException $e)
         {
-
         }
 
         return false;
     }
 
     /**
-     * Find a user through Sentry
+     * Find a user through Sentry by their ID.
      *
-     * @param $id
-     * @return bool
+     * @param string|int $id
+     *
+     * @return bool|mixed
      */
     public function findUserById($id)
     {
@@ -226,7 +229,28 @@ class SentryService
     }
 
     /**
-     * Returns current authenticated user
+     * Find a user through Sentry by their login attribute,
+     * such as a username or email.
+     *
+     * @param string $login
+     *
+     * @return bool|mixed
+     */
+    public function findUserByLogin($login)
+    {
+        try
+        {
+            $user = Sentry::findUserByLogin($login);
+
+            return $user;
+        } catch(UserNotFoundException $e)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns current authenticated user.
      *
      * @return mixed
      */
@@ -252,7 +276,7 @@ class SentryService
     /**
      * Returns current authenticated user ID
      *
-     * @return mixed
+     * @return int
      */
     public function getCurrentUserId()
     {
