@@ -247,7 +247,7 @@ class StorageService extends Service
 
         $path = implode(DIRECTORY_SEPARATOR, $parts);
 
-        if (!$this->storage->isDirectory($path))
+        if (! $this->storage->isDirectory($path))
         {
             $this->storage->makeDirectory($path, 0777, true);
         }

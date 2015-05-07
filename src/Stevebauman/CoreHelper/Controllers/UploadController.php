@@ -45,6 +45,8 @@ abstract class AbstractUploadController extends Controller
 	protected $responseView;
 
     /**
+     * Constructor.
+     *
      * @param ConfigService $config
      * @param StorageService $storage
      */

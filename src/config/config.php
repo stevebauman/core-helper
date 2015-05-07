@@ -11,7 +11,7 @@ return [
     'temp-upload-path' => 'temp/',
     
     /*
-     * Base storage path starting with 'files' (compatibility with dmyers/storage)
+     * Base storage path starting with 'files'
      */
     'base-upload-path' => 'files/',
 
