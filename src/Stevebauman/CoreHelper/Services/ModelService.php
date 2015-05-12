@@ -21,15 +21,17 @@ abstract class ModelService extends Service
     protected $notFoundException;
 
     /**
-     * Return all model records
+     * Returns all model records.
      *
-     * @author Steve Bauman
+     * @param array $select
      *
-     * @return object
+     * @return \Illuminate\Support\Collection
      */
     public function get($select = ['*'])
     {
-        return $this->model->select($select)->get();
+        return $this->model
+            ->select($select)
+            ->get();
     }
 
     /**

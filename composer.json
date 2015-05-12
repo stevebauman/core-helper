@@ -10,7 +10,7 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "4.2.*",
-        "stevebauman/eloquenttable": "1.0.*",
+        "stevebauman/eloquenttable": "1.1.*",
         "stevebauman/viewer": "1.0.*",
         "stevebauman/purify": "1.0.*",
         "venturecraft/revisionable": "1.*",
