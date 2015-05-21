@@ -195,7 +195,25 @@ class SentryService
         {
             $user = Sentry::findUserById($id);
 
-            if($user->update($data))
+            $user->first_name = array_get($data, 'first_name');
+            $user->last_name = array_get($data, 'last_name');
+            $user->email = array_get($data, 'email');
+            $user->username = array_get($data, 'username');
+
+            $permissions = array_get($data, 'routes');
+
+            $sentryPermissions = [];
+
+            // Parse the users submitted permissions
+            if(count($permissions) > 0) {
+                foreach($permissions as $permission) {
+                    $sentryPermissions[$permission] = 1;
+                }
+
+                $user->permissions = $sentryPermissions;
+            }
+
+            if($user->save())
             {
                 return $user;
             }

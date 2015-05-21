@@ -2,10 +2,11 @@
 
 namespace Stevebauman\CoreHelper\Controllers;
 
-use Illuminate\Routing\Controller as BaseController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Routing\Controller as BaseController;
 
 /**
  * Class AbstractController
@@ -101,22 +102,38 @@ abstract class Controller extends BaseController
      * Returns input from the client. If clean is set to true, the input will be
      * ran through the purifier before it is returned.
      *
-     * @param string $input
+     * @param string $name
      * @param boolean $clean
      *
      * @return mixed
      */
-    protected function input($input, $clean = FALSE)
+    protected function input($name, $clean = FALSE)
     {
-        if (Input::has($input)) {
+        if ($this->inputHas($name)) {
             if ($clean) {
-                return $this->clean(Input::get($input));
+                return $this->clean(Input::get($name));
             } else {
-                return Input::get($input);
+                return Input::get($name);
             }
         }
 
         return NULL;
+    }
+
+    /**
+     * Returns the specified uploaded file by it's input name.
+     *
+     * @param string $name
+     *
+     * @return bool|array|UploadedFile
+     */
+    protected function inputFile($name)
+    {
+        if($this->inputHasFile($name)) {
+            return Input::file($name);
+        }
+
+        return false;
     }
 
     /**
@@ -127,5 +144,32 @@ abstract class Controller extends BaseController
     protected function inputAll()
     {
         return Input::all();
+    }
+
+    /**
+     * Returns true / false if the current request
+     * contains an input field of the specified name.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    protected function inputHas($name)
+    {
+        return Input::has($name);
+    }
+
+    /**
+     * Returns true / false if the current request
+     * contains an uploaded file field with the
+     * specified name.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    protected function inputHasFile($name)
+    {
+        return Input::hasFile($name);
     }
 }

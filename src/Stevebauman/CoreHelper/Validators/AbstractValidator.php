@@ -98,7 +98,7 @@ abstract class AbstractValidator
      * Returns the current validator object and creates a new validator
      * instance if it does not exist
      *
-     * @return mixed
+     * @return Validator
      */
     public function validator()
     {
@@ -119,11 +119,11 @@ abstract class AbstractValidator
      */
     public function passes()
     {
-        $validation = $this->validator();
+        $validator = $this->validator();
 
-        if ($validation->passes()) return true;
+        if ($validator->passes()) return true;
 
-        $this->setErrors($validation->messages());
+        $this->setErrors($validator->messages());
 
         return false;
     }
@@ -166,13 +166,13 @@ abstract class AbstractValidator
      * @param string $column
      * @param NULL $ignore
      */
-    public function unique($field, $table, $column, $ignore = NULL)
+    public function unique($field, $table, $column, $ignore = null)
     {
         if(array_key_exists($field, $this->rules))
         {
             if($ignore)
             {
-                $this->rules[$field] .= sprintf('|unique:%s,%s,%s', $table, $column, $ignore);
+                $this->ignore($field, $table, $column, $ignore);
             } else
             {
                 $this->rules[$field] .= sprintf('|unique:%s,%s', $table, $column);
@@ -208,6 +208,7 @@ abstract class AbstractValidator
         if (array_key_exists($field, $this->rules))
         {
             $newRule = str_replace($rule, '', $this->rules[$field]);
+
             $this->rules[$field] = $newRule;
         }
     }
