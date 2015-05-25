@@ -4,11 +4,9 @@ namespace Stevebauman\CoreHelper\Services\Auth;
 
 /**
  * Class AuthService
- * @package Stevebauman\CoreHelper\Services\Auth
  */
 class AuthService
 {
-
     /**
      * @var LdapService
      */
@@ -20,6 +18,8 @@ class AuthService
     protected $sentry;
 
     /**
+     * Constructor.
+     *
      * @param LdapService $ldap
      * @param SentryService $sentry
      */
@@ -32,10 +32,9 @@ class AuthService
     /**
      * Authenticate with Ldap
      *
-     * @author Steve Bauman
+     * @param array $credentials
      *
-     * @param $credentials
-     * @return boolean
+     * @return bool
      */
     public function ldapAuthenticate($credentials)
     {
@@ -52,25 +51,23 @@ class AuthService
     /**
      * Authenticate with Sentry
      *
-     * @author Steve Bauman
+     * @param array $credentials
+     * @param bool $remember
      *
-     * @param $credentials , $remember
-     * @return Array
+     * @return array
      */
-    public function sentryAuthenticate($credentials, $remember = NULL)
+    public function sentryAuthenticate(array $credentials, $remember = false)
     {
         return $this->sentry->authenticate($credentials, $remember);
     }
 
     /**
-     * Logout with Sentry
+     * Logout with Sentry,
      *
-     * @author Steve Bauman
-     *
-     * @return void
+     * @return bool
      */
     public function sentryLogout()
     {
-        $this->sentry->logout();
+        return $this->sentry->logout();
     }
 }

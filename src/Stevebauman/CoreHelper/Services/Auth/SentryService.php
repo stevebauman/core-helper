@@ -72,11 +72,11 @@ class SentryService
     /**
      * Logout with Sentry.
      *
-     * @return void
+     * @return bool
      */
     public function logout()
     {
-        Sentry::logout();
+        return Sentry::logout();
     }
 
     /**
