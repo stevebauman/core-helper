@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Input;
 
 /**
  * Class AbstractValidator
- * @package Stevebauman\CoreHelper\Validators
  */
 abstract class AbstractValidator
 {
@@ -22,7 +21,7 @@ abstract class AbstractValidator
     /**
      * Holds the error messages of the current request
      *
-     * @var mixed
+     * @var \Illuminate\Support\MessageBag
      */
     protected $errors;
 
@@ -36,11 +35,13 @@ abstract class AbstractValidator
     /**
      * Holds the current validator object
      *
-     * @var
+     * @var \Illuminate\Validation\Validator
      */
     protected $validator;
 
     /**
+     * Constructor.
+     *
      * @param array $input
      */
     public function __construct($input = [])
@@ -59,7 +60,7 @@ abstract class AbstractValidator
      *
      * @param array $rules
      */
-    public function setRules($rules = [])
+    public function setRules(array $rules = [])
     {
         $this->rules = $rules;
     }
@@ -69,27 +70,27 @@ abstract class AbstractValidator
      *
      * @param array $input
      */
-    public function setInput($input = [])
+    public function setInput(array $input = [])
     {
         $this->input = $input;
     }
 
     /**
-     * Sets the errors property
+     * Sets the errors property.
      *
-     * @param array $errors
+     * @param \Illuminate\Support\MessageBag $errors
      */
-    public function setErrors($errors = [])
+    public function setErrors(\Illuminate\Support\MessageBag $errors)
     {
         $this->errors = $errors;
     }
 
     /**
-     * Sets the validator property
+     * Sets the validator property.
      *
-     * @param $validator
+     * @param \Illuminate\Validation\Validator $validator
      */
-    public function setValidator($validator)
+    public function setValidator(\Illuminate\Validation\Validator $validator)
     {
         $this->validator = $validator;
     }
@@ -98,7 +99,7 @@ abstract class AbstractValidator
      * Returns the current validator object and creates a new validator
      * instance if it does not exist
      *
-     * @return Validator
+     * @return \Illuminate\Validation\Validator
      */
     public function validator()
     {
@@ -132,7 +133,7 @@ abstract class AbstractValidator
      * Returns errors from the validator. This will return only messages
      * if the request is from ajax.
      *
-     * @return mixed
+     * @return array|\Illuminate\Support\MessageBag
      */
     public function getErrors()
     {
