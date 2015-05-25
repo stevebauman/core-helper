@@ -13,7 +13,6 @@ use Cartalyst\Sentry\Groups\GroupNotFoundException;
 
 /**
  * Class SentryService
- * @package Stevebauman\CoreHelper\Services\Auth
  */
 class SentryService
 {
@@ -85,17 +84,17 @@ class SentryService
      * if they exist.
      *
      * @param array $data
-     * @param null $groups
+     * @param array  $groups
      *
      * @return mixed
      */
-    public function createUser($data, $groups = NULL)
+    public function createUser($data, array $groups = [])
     {
         try
         {
             $user = Sentry::getUserProvider()->create($data);
 
-            if (isset($groups))
+            if (count($groups) > 0)
             {
                 foreach ($groups as $group)
                 {
