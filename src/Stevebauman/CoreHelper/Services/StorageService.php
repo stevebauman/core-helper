@@ -32,6 +32,8 @@ class StorageService extends Service
     protected $config;
 
     /**
+     * Constructor.
+     *
      * @param Filesystem $storage
      * @param ConfigService $config
      */
@@ -39,8 +41,6 @@ class StorageService extends Service
     {
         $this->storage = $storage;
         $this->config = $config->setPrefix('core-helper');
-
-        $this->setStorageFolder($this->config->get('base-upload-path'));
     }
 
     /**
