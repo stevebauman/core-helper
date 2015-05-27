@@ -2,6 +2,8 @@
 
 namespace Stevebauman\CoreHelper\Services\Auth;
 
+use Stevebauman\CoreHelper\Services\ConfigService;
+
 /**
  * Class AuthService
  */
@@ -18,15 +20,22 @@ class AuthService
     protected $sentry;
 
     /**
+     * @var ConfigService
+     */
+    protected $config;
+
+    /**
      * Constructor.
      *
-     * @param LdapService $ldap
+     * @param LdapService   $ldap
      * @param SentryService $sentry
+     * @param ConfigService $config
      */
-    public function __construct(LdapService $ldap, SentryService $sentry)
+    public function __construct(LdapService $ldap, SentryService $sentry, ConfigService $config)
     {
         $this->ldap = $ldap;
         $this->sentry = $sentry;
+        $this->config = $config;
     }
 
     /**
@@ -38,11 +47,13 @@ class AuthService
      */
     public function ldapAuthenticate($credentials)
     {
-        $loginAttribute = config('cartalyst/sentry::users.login_attribute');
+        $loginAttribute = $this->config->setPrefix('cartalyst.sentry')->get('users.login_attribute');
 
-        if ($this->ldap->authenticate($credentials[$loginAttribute], $credentials['password']))
-        {
-            return true;
+        if(array_key_exists($loginAttribute, $credentials)) {
+            if ($this->ldap->authenticate($credentials[$loginAttribute], $credentials['password']))
+            {
+                return true;
+            }
         }
 
         return false;
