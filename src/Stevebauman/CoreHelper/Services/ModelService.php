@@ -3,7 +3,6 @@
 namespace Stevebauman\CoreHelper\Services;
 
 use Exception;
-use Illuminate\Support\Facades\Paginator;
 use Illuminate\Support\Facades\DB;
 
 abstract class ModelService extends Service
@@ -260,20 +259,6 @@ abstract class ModelService extends Service
         $record = $this->findArchived($id);
 
         return $record->restore();
-    }
-
-    /**
-     * Sets the GET variable in the URL for the paginator. This allows
-     * for multiple paginators on the same page.
-     *
-     * @param string $name
-     * @return $this
-     */
-    public function setPaginatedName($name)
-    {
-        Paginator::setPageName($name);
-
-        return $this;
     }
 
     /**
