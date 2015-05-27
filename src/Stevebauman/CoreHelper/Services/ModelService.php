@@ -198,7 +198,11 @@ abstract class ModelService extends Service
 
         if($records) return $records;
 
-        throw new $this->notFoundException;
+        if($this->notFoundException instanceof Exception) {
+            throw new $this->notFoundException;
+        }
+
+        return null;
     }
 
     /**
@@ -235,7 +239,8 @@ abstract class ModelService extends Service
      * Destroy a soft deleted record by ID
      *
      * @param string|int $id
-     * @return mixed
+     *
+     * @return bool
      */
     public function destroyArchived($id)
     {

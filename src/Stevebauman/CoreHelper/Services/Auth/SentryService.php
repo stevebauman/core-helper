@@ -83,38 +83,67 @@ class SentryService
      * Create a user through Sentry and add the groups specified to the user
      * if they exist.
      *
-     * @param array $data
+     * @param array  $data
      * @param array  $groups
+     * @param bool   $activated
      *
      * @return mixed
      */
-    public function createUser($data, array $groups = [])
+    public function createUser(array $data, array $groups = [], $activated = true)
     {
         try
         {
-            $user = Sentry::getUserProvider()->create($data);
+            $insert = [
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'email' => $data['email'],
+                'username' => $data['username'],
+                'password' => $data['password'],
+                'activated' => $activated,
+            ];
 
-            if (count($groups) > 0)
-            {
-                foreach ($groups as $group)
-                {
-                    try
-                    {
-                        $group = Sentry::findGroupByName($group);
+            $user = Sentry::createUser($insert);
 
-                        $user->addGroup($group);
+            $this->addGroupsToUser($user, $groups);
 
-                    } catch (GroupNotFoundException $e)
-                    {
-                    }
-                }
-
-            }
         } catch (UserExistsException $e)
         {
-            $login_attribute = config('cartalyst/sentry::users.login_attribute');
+            $loginAttribute = config('cartalyst/sentry::users.login_attribute');
 
-            $user = Sentry::findUserByLogin($data[$login_attribute]);
+            $user = Sentry::findUserByLogin($data[$loginAttribute]);
+        }
+
+        return $user;
+    }
+
+    /**
+     * Registers a user through Sentry.
+     *
+     * @param array $data
+     * @param array $groups
+     *
+     * @return mixed
+     */
+    public function registerUser(array $data, array $groups = [])
+    {
+        try {
+            $insert = [
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'email' => $data['email'],
+                'username' => $data['username'],
+                'password' => $data['password'],
+            ];
+
+            $user = Sentry::register($insert);
+
+            $this->addGroupsToUser($user, $groups);
+
+        } catch (UserExistsException $e)
+        {
+            $loginAttribute = config('cartalyst/sentry::users.login_attribute');
+
+            $user = Sentry::findUserByLogin($data[$loginAttribute]);
         }
 
         return $user;
@@ -300,5 +329,36 @@ class SentryService
         $user = Sentry::getUser();
 
         return $user->id;
+    }
+
+    /**
+     * Adds the array of groups to the specified user.
+     *
+     * @param \Cartalyst\Sentry\Users\Eloquent\User $user
+     * @param array                                 $groups
+     *
+     * @return bool
+     */
+    private function addGroupsToUser($user, array $groups = [])
+    {
+        if (count($groups) > 0)
+        {
+            foreach ($groups as $group)
+            {
+                try
+                {
+                    $group = Sentry::findGroupByName($group);
+
+                    $user->addGroup($group);
+
+                } catch (GroupNotFoundException $e)
+                {
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

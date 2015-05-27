@@ -34,7 +34,7 @@ class ConfigService extends Service
      *
      * @var string
      */
-    protected $prefixSeparator = '::';
+    protected $prefixSeparator = '.';
 
     /**
      * @param Config $config

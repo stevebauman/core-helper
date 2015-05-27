@@ -59,20 +59,28 @@ abstract class AbstractValidator
      * Allows rules to be set on the fly if needed
      *
      * @param array $rules
+     *
+     * @return $this
      */
     public function setRules(array $rules = [])
     {
         $this->rules = $rules;
+
+        return $this;
     }
 
     /**
      * Sets the input property
      *
      * @param array $input
+     *
+     * @return $this
      */
     public function setInput(array $input = [])
     {
         $this->input = $input;
+
+        return $this;
     }
 
     /**
@@ -152,11 +160,11 @@ abstract class AbstractValidator
      * @param string $field
      * @param string $table
      * @param string $column
-     * @param string $ignore
+     * @param string $value
      */
-    public function ignore($field, $table, $column, $ignore = 'NULL')
+    public function ignore($field, $table, $column, $value = 'NULL')
     {
-        $this->rules[$field] .= sprintf('|unique:%s,%s,%s', $table, $column, $ignore);
+        $this->rules[$field] .= sprintf('|unique:%s,%s,%s', $table, $column, $value);
     }
 
     /**
