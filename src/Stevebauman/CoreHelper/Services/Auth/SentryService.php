@@ -108,7 +108,7 @@ class SentryService
 
         } catch (UserExistsException $e)
         {
-            $loginAttribute = config('cartalyst/sentry::users.login_attribute');
+            $loginAttribute = config('cartalyst.sentry.users.login_attribute');
 
             $user = Sentry::findUserByLogin($data[$loginAttribute]);
         }
@@ -141,7 +141,7 @@ class SentryService
 
         } catch (UserExistsException $e)
         {
-            $loginAttribute = config('cartalyst/sentry::users.login_attribute');
+            $loginAttribute = config('cartalyst.sentry.users.login_attribute');
 
             $user = Sentry::findUserByLogin($data[$loginAttribute]);
         }
