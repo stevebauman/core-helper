@@ -99,57 +99,6 @@ if (! function_exists('activeMenuLink')) {
     }
 }
 
-if (! function_exists('config')) {
-    /**
-     * Helper for config facade. Checks if config helper function already exists
-     * for Laravel 5 support.
-     *
-     * @param string $key
-     * @param string $default
-     *
-     * @return array|string
-     */
-    function config($key, $default = NULL)
-    {
-        return Config::get($key, $default);
-    }
-}
-
-if (! function_exists('view')) {
-
-    /**
-     * Helper for view facade. Checks if view helper function already exists
-     * for Laravel 5 support
-     *
-     * @param string $view
-     * @param array $data
-     * @param array $mergeData
-     *
-     * @return \Illuminate\View\View
-     */
-    function view($view, $data = [], $mergeData = []) {
-        return View::make($view, $data, $mergeData);
-    }
-}
-
-/**
- * Helper for redirect facade. Checks if redirect helper function already exists
- * for Laravel 5 support
- */
-if (! function_exists('redirect')) {
-
-    /**
-     * Returns a redirect to the specified URL.
-     *
-     * @param string $url
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    function redirect($url) {
-        return Redirect::to($url);
-    }
-}
-
 if (!function_exists('routeBack')) {
 
     /**
