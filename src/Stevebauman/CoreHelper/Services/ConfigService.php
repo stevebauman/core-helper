@@ -150,7 +150,7 @@ class ConfigService extends Service
      */
     protected function getConfigFile($path)
     {
-        return $this->filesystem->get(app_path($path));
+        return $this->filesystem->get(config_path($path));
     }
 
     /**
@@ -164,7 +164,7 @@ class ConfigService extends Service
      */
     protected function setConfigFile($path, $content)
     {
-        if($this->filesystem->put(app_path($path), $content)) return true;
+        if($this->filesystem->put(config_path($path), $content)) return true;
 
         return false;
     }
