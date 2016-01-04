@@ -12,7 +12,7 @@
         "illuminate/support": "4.* | 5.*",
         "stevebauman/eloquenttable": "1.1.*",
         "stevebauman/viewer": "1.0.*",
-        "stevebauman/purify": "1.0.*"
+        "stevebauman/purify": "1.1.*"
     },
     "license": "MIT",
     "autoload": {
